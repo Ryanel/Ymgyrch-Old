@@ -9,7 +9,7 @@ CFLAGS := -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith -Wbad-f
 -Wmissing-prototypes -Wstrict-prototypes -Wmissing-declarations -Winline -Wundef \
 -Wnested-externs -Wcast-qual -Wshadow -Wwrite-strings -Wno-unused-parameter \
 -Wfloat-equal -pedantic -ansi
-CPPFLAGS :=
+CPPFLAGS := -Wall -Wextra -Werror
 COREFILES_CPP := $(patsubst %.cpp,%.o,$(wildcard core/*.cpp))
 .PHONY: all clean
 
