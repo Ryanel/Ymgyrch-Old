@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <bytecode/ybf/YbfParser.h>
 int main(int argc, char* argv[])
 {
 	int realargc = argc - 1;
@@ -8,13 +9,10 @@ int main(int argc, char* argv[])
 		printf("usage: %s {options} [path to executable]\n",argv[0]);
 		return 0;
 	}
-	if (true)
+	YbfParser ps;
+	ps.loadInfo("sample/bytecode.yml");
+	while(ps.execute())
 	{
-		return 0;
-	}
-	//TODO: Detect parser to use.
-	//TODO: Make emulation engine
-	while(true)
-	{
+		
 	}
 }

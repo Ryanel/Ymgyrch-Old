@@ -5,12 +5,11 @@ CPP := g++
 ASFLAGS :=
 LD := g++
 LFLAGS :=
-CFLAGS := -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith -Wbad-function-cast \
--Wmissing-prototypes -Wstrict-prototypes -Wmissing-declarations -Winline -Wundef \
--Wnested-externs -Wcast-qual -Wshadow -Wwrite-strings -Wno-unused-parameter \
--Wfloat-equal -pedantic -ansi
-CPPFLAGS := -Wall -Wextra -Werror
-COREFILES_CPP := $(patsubst %.cpp,%.o,$(wildcard core/*.cpp))
+CFLAGS := -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith \
+-Wmissing-declarations -Winline -Wundef -Wcast-qual -Wshadow -Wwrite-strings \
+-Wno-unused-parameter -Wfloat-equal -pedantic -ansi
+CPPFLAGS := $(CFLAGS)
+COREFILES_CPP := $(patsubst %.cpp,%.o,$(wildcard core/*.cpp)) $(patsubst %.cpp,%.o,$(wildcard bytecode/ybf/*.cpp))
 .PHONY: all clean
 
 all: clean core
@@ -30,6 +29,7 @@ clean: clean-docs
 	@echo "Cleaning junk..."
 	@rm -R -f *.o
 	@rm -R -f ./core/*.o
+	@rm -R -f ./bytecode/ybf/*.o
 	@rm -R -f ./ymgyrch
 
 clean-docs:
