@@ -13,6 +13,5 @@ int main(int argc, char* argv[])
 	ps.loadInfo("sample/bytecode.yml");
 	while(ps.execute())
 	{
-		
 	}
 }
