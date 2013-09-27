@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <bytecode/ybf/YbfParser.h>
+#include <bytecode/smtl/SmtlCpu.h>
 int main(int argc, char* argv[])
 {
 	int realargc = argc - 1;
@@ -9,10 +9,7 @@ int main(int argc, char* argv[])
 		printf("usage: %s {options} [path to executable]\n",argv[0]);
 		return 0;
 	}
-	YbfParser ps;
-	ps.loadInfo("sample/bytecode.yml");
-	while(ps.execute())
-	{
-		
-	}
+	SmtlCpu cpu;
+	char program[3] = {3,2,0} ;
+	cpu.execute(program,2);
 }

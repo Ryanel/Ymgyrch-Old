@@ -13,6 +13,11 @@ Planned supported formats
 The native bytecode format. Light and quick, avalable under bytecode/ybf.
 
 Ymgyrch will also contain the assembler / compiler for ymgyrch.
+
+
+### Self Modifing Test Format (.smtl)
+Another native bytecode format. Developed as an experiment for self modifing code.
+
 ### Android Dalvik Executable (.dex)
 A executable for the Android Dalvik Virutal Machiene. Also light and quick.
 Ymgyrch will emulate Dalvik as close as possible.
