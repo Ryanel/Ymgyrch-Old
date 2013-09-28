@@ -10,6 +10,8 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 	SmtlCpu cpu;
-	char program[3] = {3,2,0} ;
-	cpu.execute(program,2);
+	while(cpu.isExecuting)
+	{
+		cpu.step();
+	}
 }

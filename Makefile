@@ -1,4 +1,3 @@
-
 # Ymgyrch Build Script
 AS := nasm
 CC := gcc
@@ -45,5 +44,5 @@ clean: clean-docs
 
 clean-docs:
 	-@rm -f -r ./docs/
-arch:
-	@echo "Making for ${ARCH}"
+run: 
+	./ymgyrch
