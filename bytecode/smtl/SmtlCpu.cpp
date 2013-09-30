@@ -16,6 +16,7 @@ int SmtlCpu::execute(char opcode[],int num)
 	while(i!=num)
 	{
 		processOpcode(opcode[i]);
+		i++;
 	}
 }
 
