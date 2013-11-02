@@ -4,8 +4,20 @@
 SmtlCpu::SmtlCpu()
 {
 	isExecuting=true;
+	isDebugging=false;
 	pc=0;
-	memory[0]=0;
+	int mi=0;
+	while(mi!=SMTL_CPU_MEM)
+	{
+		memory[mi]=0;
+		mi++;
+	}
+	int vmi=0;
+	while(vmi!=SMTL_CPU_VMEM)
+	{
+		vmem[vmi]=0;
+		vmi++;
+	}
 }
 int SmtlCpu::doOp(char opcode)
 {
@@ -26,7 +38,7 @@ void SmtlCpu::step()
 	processOpcode(memory[pc]);
 }
 
-void SmtlCpu::executeBios(char *toload)
+void SmtlCpu::executeBios(const char* toload)
 {
 	//TODO:Populate the BIOS, hardcoded for now
 	memory[0]=4;
@@ -50,8 +62,25 @@ void SmtlCpu::processOpcode(char opcode)
 			printf("hlt\n");
 			if(isDebugging)
 			{
-				printf("----------\n");
+				printf("=Registers===\n");
 				printf("A -> 0x%X\tB -> 0x%X\tC -> 0x%X\tD -> 0x%X\tS -> 0x%X \n",a,b,c,d,s);
+				printf("PC-> 0x%d\t\n",pc);
+				printf("=Memory======\n");
+				int mi=0;
+				while(mi!=SMTL_CPU_MEM)
+				{
+					printf("%d\t",memory[mi]);
+					mi++;
+				}
+				printf("\n");
+				printf("=VMemory=====\n");
+				int vmi=0;
+				while(vmi!=SMTL_CPU_VMEM)
+				{
+					printf("%c",vmem[vmi]);
+					vmi++;
+				}
+				printf("\n");
 			}
 			isExecuting=false;
 			break;
