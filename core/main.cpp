@@ -18,6 +18,11 @@ int main(int argc, char* argv[])
 		{
 			cpu.isDebugging=true;
 		}
+		else if(strcmp(argv[n],"-bin")==0)
+		{
+			printf("Unable to load file into memory: unimplemented!\n");
+			return 1;
+		}
 		else
 		{
 			printf("[!]%s is not a valid option! Ignoring\n",argv[n]);
