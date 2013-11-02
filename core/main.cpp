@@ -23,6 +23,11 @@ int main(int argc, char* argv[])
 			printf("Unable to load file into memory: unimplemented!\n");
 			return 1;
 		}
+		else if(strcmp(argv[n],"-step")==0)
+		{
+			printf("[?]:Stepping enabled!\n");
+			return 1;
+		}
 		else
 		{
 			printf("[!]%s is not a valid option! Ignoring\n",argv[n]);

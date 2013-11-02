@@ -52,6 +52,9 @@ void SmtlCpu::executeBios(const char* toload)
 	memory[8]=0xB;
 	memory[9]=0x1;
 	memory[10]=0x64;
+	memory[11]=0x2;
+	memory[12]=0x64;
+	memory[0x65]=2;
 }
 
 void SmtlCpu::processOpcode(char opcode)
