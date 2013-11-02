@@ -29,7 +29,7 @@ smtl: ${SMTLFILES_CPP}
 
 %.o: %.cpp
 	@echo "Making: " $@
-	g++ -c ${CPPFLAGS} -I ./includes/ -o $@ $<
+	@g++ -c ${CPPFLAGS} -I ./includes/ -o $@ $<
 
 %.o: %.s
 	@echo "Making: " $@
