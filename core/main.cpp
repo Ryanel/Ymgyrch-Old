@@ -23,7 +23,7 @@ void z80()
 	cpu.reset();
 	cpu.running=true;
 	cpu.processOpcode(0x0);
-	cpu.processOpcode(0x7);
+	cpu.processOpcode(0x7F);
 	cpu.processOpcode(0x4);
 	while(cpu.running)
 	{

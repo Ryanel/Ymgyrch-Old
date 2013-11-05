@@ -13,6 +13,7 @@ class Z80Cpu: public GenericCpu {
 
 	public:
 		//8-bit regesters
+		uint32_t cycles;
 		uint8_t a; //GP
 		uint8_t b; //GP
 		uint8_t c; //GP
