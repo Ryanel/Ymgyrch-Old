@@ -8,6 +8,11 @@ using namespace std;
 class LR35902Cpu
 {
 	private:
+		//Internal Functions
+		void debugOpcode(string name, uint8_t opcode);
+
+
+	public:
 		//8-bit regesters
 		uint8_t a; //GP
 		uint8_t b; //GP
@@ -23,12 +28,16 @@ class LR35902Cpu
 		uint16_t sp; //Stack Pointer
 
 		//Clocks
-		int m;
-		int t;
-	public:
+		int m;//Incrementer
+		int t;//Incrementer
+		int m_clock;//Clock
+		int t_clock;//Clock
+		//Functions
 		void step();
 		void reset();
+		void processOpcode(uint8_t opcode);
 		LR35902Cpu();
+		bool running;
 		LR35902Memory memory;
 };
 

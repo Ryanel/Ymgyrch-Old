@@ -72,19 +72,64 @@ uint8_t LR35902Memory::fread8(int location)
 	}
 	return 0;
 } 
-uint8_t LR35902Memory::fwrite8(int location)
+uint8_t LR35902Memory::fwrite8(int location,uint8_t data)
 {
+	switch(location & 0xF000)
+	{
+		case 0x0000:
+			if(inBios)
+			{
+				if(location < 0x0100)
+					bios[location]=data;
+			}
+			rom[location]=data;
+			break;
+		//ROM0
+		case 0x1000:
+		case 0x2000:
+		case 0x3000:
+			rom[location]=data;
+			break;
+		case 0x4000:
+		case 0x5000:
+		case 0x6000:
+		case 0x7000:
+			rom[location]=data;
+			break;
+		case 0x8000:
+		case 0x9000:
+			vram[location & 0x1FFF]=data;
+			break;
+		case 0xA000:
+		case 0xB000:
+			eram[location & 0x1FFF]=data;
+			break;
+		case 0xC000:
+		case 0xD000:
+			wram[location & 0x1FFF]=data;
+			break;
+		case 0xE000: //Shadow
+			wram[location & 0x1FFF]=data;
+			break;
+		case 0xF000:
+			wram[location & 0x1FFF]=data;
+			break;
+	}
 	return 0;
 }
 uint16_t LR35902Memory::fread16(int location)
 {
 	return fread8(location) + (fread8(location + 1) << 8);
 }
-uint16_t LR35902Memory::fwrite16(int location)
+uint16_t LR35902Memory::fwrite16(int location,uint16_t data)
 {
 	return 0;
 }
 void LR35902Memory::loadRom(string location)
 {
 	return;
+}
+void LR35902Memory::clear()
+{
+	//TODO: CLEAR MEMORY
 }

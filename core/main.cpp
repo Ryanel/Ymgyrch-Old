@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <LR35902.h>
 #include <cstring>
+void gameboy();
 int main(int argc, char* argv[])
 {
 	printf("Ymgyrch v. 0.0.0.1 - alpha (git)\n");
@@ -10,8 +11,19 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	//TODO: DETECT System
+	gameboy();
+}
+
+void gameboy()
+{
+	printf("Emulating a LR35902 (Gameboy)\n");
 	LR35902Cpu cpu;
 	cpu.reset();
 	cpu.memory.cpu_point=&cpu;
+	cpu.running=true;
+	while(cpu.running)
+	{
+		cpu.step();
+		cpu.pc &= 65535;
+	}
 }
-
