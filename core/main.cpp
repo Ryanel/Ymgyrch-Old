@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <8086.h>
+#include <LR35902.h>
 #include <cstring>
 int main(int argc, char* argv[])
 {
@@ -10,7 +10,8 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	//TODO: DETECT System
-	I8086Cpu cpu;
+	LR35902Cpu cpu;
 	cpu.reset();
+	cpu.memory.cpu_point=&cpu;
 }
 

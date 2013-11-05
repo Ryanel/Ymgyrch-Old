@@ -1,6 +1,9 @@
 #ifndef LR35902_CPU_H
 #define LR35902_CPU_H
 #include <string>
+#include <stdint.h>
+#include <LR35902.h>
+#include <LR35902Memory.h>
 using namespace std;
 class LR35902Cpu
 {
@@ -25,6 +28,7 @@ class LR35902Cpu
 	public:
 		void step();
 		void reset();
+		LR35902Cpu();
 		LR35902Memory memory;
 };
 
