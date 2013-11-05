@@ -12,15 +12,17 @@ CPPFLAGS :=
 COREFILES_CPP := $(patsubst %.cpp,%.o,$(wildcard core/*.cpp))
 YBFFILES_CPP := $(patsubst %.cpp,%.o,$(wildcard bytecode/ybf/*.cpp))
 SMTLFILES_CPP:= $(patsubst %.cpp,%.o,$(wildcard bytecode/smtl/*.cpp))
-
+Z80_CPU_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/Z80/*.cpp))
 .PHONY: all clean
 
-all: clean ybf smtl core
+all: clean z80 core run
 
 core: ${COREFILES_CPP}
 	@echo "Building Core"
-	@${LD} -o ymgyrch ${COREFILES_CPP} ${YBFFILES_CPP} ${SMTLFILES_CPP}
+	@${LD} -o ymgyrch ${COREFILES_CPP} ${Z80_CPU_CPP}
 
+z80: ${Z80_CPU_CPP}
+	@echo "Added CPU: Z80"
 ybf: ${YBFFILES_CPP}
 	@echo "Added YBF"
 
@@ -45,4 +47,4 @@ clean: clean-docs
 clean-docs:
 	-@rm -f -r ./docs/
 run: 
-	./ymgyrch
+	@./ymgyrch
