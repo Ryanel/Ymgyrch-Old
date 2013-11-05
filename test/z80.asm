@@ -1,0 +1,10 @@
+LD H, B
+LD A, H
+LD A, A
+NOP
+NOP
+HALT
+NOP
+NOP
+HALT
+NOP

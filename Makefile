@@ -23,7 +23,7 @@ Z80_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/Z80*.cpp))
 #----------
 .PHONY: all clean
 
-all: clean gameboy z80 core run
+all: clean gameboy z80 core
 
 core: ${COREFILES_CPP}
 	@echo "Building Core"

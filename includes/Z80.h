@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <GenericCpu.h>
 #include <Z80.h>
-//#include <Z80Memory.h>
+#include <Z80Memory.h>
 using namespace std;
 class Z80Cpu: public GenericCpu {
 	private:
@@ -12,8 +12,9 @@ class Z80Cpu: public GenericCpu {
 		void debugOpcode(string name, uint8_t opcode);
 
 	public:
-		//8-bit regesters
 		uint32_t cycles;
+		//8-bit regesters
+		
 		uint8_t a; //GP
 		uint8_t b; //GP
 		uint8_t c; //GP
@@ -41,6 +42,7 @@ class Z80Cpu: public GenericCpu {
 		void processOpcode(uint8_t opcode);
 		Z80Cpu();
 		bool running;
+		Z80Memory memory;
 };
 
 #endif
