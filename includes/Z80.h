@@ -1,16 +1,15 @@
-#ifndef LR35902_CPU_H
-#define LR35902_CPU_H
+#ifndef Z80_CPU_H
+#define Z80_CPU_H
 #include <string>
 #include <stdint.h>
-#include <LR35902.h>
-#include <LR35902Memory.h>
 #include <GenericCpu.h>
+#include <Z80.h>
+//#include <Z80Memory.h>
 using namespace std;
-class LR35902Cpu: public GenericCpu {
+class Z80Cpu: public GenericCpu {
 	private:
 		//Internal Functions
 		void debugOpcode(string name, uint8_t opcode);
-
 
 	public:
 		//8-bit regesters
@@ -22,23 +21,25 @@ class LR35902Cpu: public GenericCpu {
 		uint8_t h; //GP
 		uint8_t l; //GP
 		uint8_t f; //FLAGS
-		
+		uint8_t int_stat;
+		uint8_t I;
+		uint8_t R;
 		//16-bit registers
 		uint16_t pc; //Program Counter
 		uint16_t sp; //Stack Pointer
-
-		//Clocks
-		int m;//Incrementer
-		int t;//Incrementer
-		int m_clock;//Clock
-		int t_clock;//Clock
+		uint16_t IX;
+		uint16_t IY;
+		
+		uint16_t afa;
+		uint16_t bca;
+		uint16_t dea;
+		uint16_t hla;
 		//Functions
 		void step();
 		void reset();
 		void processOpcode(uint8_t opcode);
-		LR35902Cpu();
+		Z80Cpu();
 		bool running;
-		LR35902Memory memory;
 };
 
 #endif

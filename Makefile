@@ -19,14 +19,15 @@ SMTL_CPP:= $(patsubst %.cpp,%.o,$(wildcard bytecode/smtl/*.cpp))
 #CPU
 8086_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/8086*.cpp))
 LR35902_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/LR35902*.cpp))
+Z80_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/Z80*.cpp))
 #----------
 .PHONY: all clean
 
-all: clean gameboy core run
+all: clean gameboy z80 core run
 
 core: ${COREFILES_CPP}
 	@echo "Building Core"
-	@${LD} -o ymgyrch ${COREFILES_CPP} ${LR35902_CPP}
+	@${LD} -o ymgyrch ${COREFILES_CPP} ${LR35902_CPP} ${Z80_CPP}
 
 %.o: %.cpp
 	@echo "Making: " $@
@@ -58,7 +59,8 @@ smtl: ${SMTL_CPP}
 	@echo "Added SMTL"
 lr35902: ${LR35902_CPP}
 	@echo "Added CPU: LR35902"
-
+z80: ${Z80_CPP}
+	@echo "Added CPU: Z80"
 #Systems
 gameboy: lr35902
 	@echo "Added System: Gameboy"

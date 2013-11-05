@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <LR35902.h>
+#include <Z80.h>
 #include <cstring>
 void gameboy();
+void z80();
 int main(int argc, char* argv[])
 {
 	printf("Ymgyrch v. 0.0.0.1 - alpha (git)\n");
@@ -11,7 +13,22 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	//TODO: DETECT System
-	gameboy();
+	z80();
+}
+
+void z80()
+{
+	printf("Emulating a Z80\n");
+	Z80Cpu cpu;
+	cpu.reset();
+	cpu.running=true;
+	cpu.processOpcode(0x0);
+	cpu.processOpcode(0x7);
+	cpu.processOpcode(0x4);
+	while(cpu.running)
+	{
+		cpu.step();
+	}
 }
 
 void gameboy()
@@ -24,6 +41,5 @@ void gameboy()
 	while(cpu.running)
 	{
 		cpu.step();
-		cpu.pc &= 65535;
 	}
 }
