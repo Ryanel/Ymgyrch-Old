@@ -1,33 +1,32 @@
 # Ymgyrch Build Script
+
 AS := nasm
 CC := gcc
 CPP := g++
 ASFLAGS :=
 LD := g++
 LFLAGS :=
-CFLAGS := -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith \
+CPPFLAGS := -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith \
 -Wmissing-declarations -Winline -Wundef -Wcast-qual -Wshadow -Wwrite-strings \
 -Wno-unused-parameter -Wfloat-equal -pedantic -ansi
-CPPFLAGS := 
+
+#Files
+#Format: {NAME}_{TYPE} := $(patsubst %.cpp,%.o,$(wildcard {PATH}/*.cpp))
 COREFILES_CPP := $(patsubst %.cpp,%.o,$(wildcard core/*.cpp))
-YBFFILES_CPP := $(patsubst %.cpp,%.o,$(wildcard bytecode/ybf/*.cpp))
-SMTLFILES_CPP:= $(patsubst %.cpp,%.o,$(wildcard bytecode/smtl/*.cpp))
-Z80_CPU_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/Z80/*.cpp))
+#Bytecode
+YBF_CPP := $(patsubst %.cpp,%.o,$(wildcard bytecode/ybf/*.cpp))
+SMTL_CPP:= $(patsubst %.cpp,%.o,$(wildcard bytecode/smtl/*.cpp))
+#CPU
+8086_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/8086/*.cpp))
+
+#----------
 .PHONY: all clean
 
-all: clean z80 core run
+all: clean 8086 core run
 
 core: ${COREFILES_CPP}
 	@echo "Building Core"
-	@${LD} -o ymgyrch ${COREFILES_CPP} ${Z80_CPU_CPP}
-
-z80: ${Z80_CPU_CPP}
-	@echo "Added CPU: Z80"
-ybf: ${YBFFILES_CPP}
-	@echo "Added YBF"
-
-smtl: ${SMTLFILES_CPP}
-	@echo "Added SMTL"
+	@${LD} -o ymgyrch ${COREFILES_CPP} ${8086_CPP}
 
 %.o: %.cpp
 	@echo "Making: " $@
@@ -48,3 +47,11 @@ clean-docs:
 	-@rm -f -r ./docs/
 run: 
 	@./ymgyrch
+
+
+8086: ${8086_CPP}
+	@echo "Added CPU: 8086"
+ybf: ${YBF_CPP}
+	@echo "Added YBF"
+smtl: ${SMTL_CPP}
+	@echo "Added SMTL"
