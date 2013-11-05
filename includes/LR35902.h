@@ -23,6 +23,9 @@ class LR35902Cpu
 		int m;
 		int t;
 	public:
+		void step();
+		void reset();
+		LR35902Memory memory;
 };
 
 #endif
