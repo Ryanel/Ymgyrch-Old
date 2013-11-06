@@ -2,7 +2,8 @@
 #include <LR35902.h>
 #include <Z80.h>
 #include <cstring>
-
+#include <unistd.h>
+using namespace std;
 void z80(string filename);
 void gameboy(string filename);
 void z80(string filename)
@@ -15,6 +16,7 @@ void z80(string filename)
 	while(cpu.running)
 	{
 		cpu.step();
+		usleep(1);
 	}
 	printf("a:0x%X\tb:0x%X\tc:0x%X\td:0x%X\te:0x%X\th:0x%X\tl:0x%X\tpc:0x%X\n",cpu.a,cpu.b,cpu.c,cpu.d,cpu.e,((cpu.hl & 0xFF00) >> 8), (cpu.hl & 0x00FF),cpu.pc);
 
@@ -52,15 +54,15 @@ int main(int argc, char* argv[])
 			printf("CPU: Z80\n");
 			id = 1;
 		}
-		else if (strcmp("--gameboy",argv[i])==0)
+		else if (strcmp("-gameboy",argv[i])==0)
 		{
 			id = 2;
 		}
-		else if (strcmp("--lr35902",argv[i])==0)
+		else if (strcmp("-lr35902",argv[i])==0)
 		{
 			id = 2;
 		}
-		else if (strcmp("--8086",argv[i])==0)
+		else if (strcmp("-8086",argv[i])==0)
 		{
 			id = 3;
 		}

@@ -90,6 +90,7 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			{
 				pc+=3;
 			}
+			break;
 		case 0xC2: //JP NZ
 			debugOpcode16("jp nz",memory.fread16(pc+1),opcode);
 			if(!flag_zero)
@@ -112,6 +113,20 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			{
 				pc+=2;
 			}
+			break;
+		case 0xC7: //rst 00
+			debugOpcode("rst 00",opcode);
+			
+			memory.fwrite16(sp,pc);
+			sp -= 2;
+			pc=0;
+			break;
+		case 0xFF: //rst
+			debugOpcode("rst 38",opcode);
+			
+			memory.fwrite16(sp,pc);
+			sp -= 2;
+			pc=0x38;
 			break;
 		//------------------------------------
 		//LOAD Instructions (A)
@@ -659,8 +674,51 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			debugOpcode8("ld hl",memory.fread8(pc+1), opcode);
 			hl = memory.fread8(pc+1);pc+=2;
 			break;
+		case 0x2A: //LD HL **
+			debugOpcode16("ld hl (**)",memory.fread16(pc+1), opcode);
+			hl=memory.fread16(pc+1);
+			pc+=3;
+			break;	
+		case 0x22: //LD ** HL 
+			debugOpcode16("ld (**) hl",memory.fread16(pc+1), opcode);
+			memory.fwrite16(memory.fread16(pc+1),hl);
+			pc+=3;
+			break;
+		case 0x32: //LD ** A 
+			debugOpcode16("ld (**) a",memory.fread16(pc+1), opcode);
+			memory.fwrite8(memory.fread16(pc+1),a);
+			pc+=3;
+			break;
+		case 0x3A: //LD ** HL 
+			debugOpcode8("ld a (**)",memory.fread16(pc+1), opcode);
+			a=memory.fread8(memory.fread16(pc+1));
+			pc+=3;
+			break;
+		//------------------------------------
+		//STACK Instructions
+		//------------------------------------
+		case 0xF9:
+			debugOpcode("ld sp,hl", opcode);
+			sp=hl;
+			pc++;
+			break;
+		//------------------------------------
+		//FLAGS + COMPARE Instructions
+		//------------------------------------
+		case 0xFE:
+			debugOpcode8("cp *",memory.fread8(pc+1), opcode);
+			temp= a;
+			temp= temp - memory.fread8(pc+1);
+			if(temp==0)
+				flag_zero=true;
+			else
+				flag_zero=false;
+			//TODO: Finish flags
+			pc+=2;
+			break;
 		default:
-			printf("0x%X\t|0x%X\t|??? \t<-- Unsupported Instruction: halt!\n",pc,opcode);
-			processOpcode(0x76);
+			printf("0x%X\t|0x%X\t|??? \t<-- Unsupported Instruction\n",pc,opcode);
+			pc++;
+			//processOpcode(0x76);
 	}
 }

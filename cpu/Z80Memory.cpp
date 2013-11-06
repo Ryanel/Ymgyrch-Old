@@ -17,6 +17,7 @@ uint16_t Z80Memory::fread16(int location)
 }
 uint16_t Z80Memory::fwrite16(int location,uint16_t data)
 {
+	ram[location]=data;
 	return 0;
 }
 void Z80Memory::loadRom(string location, int start)
