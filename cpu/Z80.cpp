@@ -101,6 +101,18 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 				pc+=3;
 			}
 			break;
+		case 0x10: //djnz
+			debugOpcode8("djnz",memory.fread8(pc+1),opcode);
+			b--;
+			if(b)
+			{
+				pc+=memory.fread8(pc+1);
+			}
+			else
+			{
+				pc+=2;
+			}
+			break;
 		//------------------------------------
 		//LOAD Instructions (A)
 		//------------------------------------
@@ -608,7 +620,44 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 				flag_zero = true;
 			else
 				flag_zero = false;
-			
+
+			break;
+
+		//------------------------------------
+		//MEM Memory Instructions
+		//------------------------------------
+		//LD Byte
+		case 0x3E: //LD A *
+			debugOpcode8("ld a",memory.fread8(pc+1), opcode);
+			a = memory.fread8(pc+1);pc+=2;
+			break;
+		case 0x06: //LD B *
+			debugOpcode8("ld b",memory.fread8(pc+1), opcode);
+			b = memory.fread8(pc+1);pc+=2;
+			break;
+		case 0x0E: //LD C *
+			debugOpcode8("ld c",memory.fread8(pc+1), opcode);
+			c = memory.fread8(pc+1);pc+=2;
+			break;
+		case 0x16: //LD D *
+			debugOpcode8("ld d",memory.fread8(pc+1), opcode);
+			d = memory.fread8(pc+1);pc+=2;
+			break;
+		case 0x1E: //LD E *
+			debugOpcode8("ld e",memory.fread8(pc+1), opcode);
+			e = memory.fread8(pc+1);pc+=2;
+			break;
+		case 0x26: //LD H *
+			debugOpcode8("ld h",memory.fread8(pc+1), opcode);
+			hl = memory.fread8(pc+1)<< 8;pc+=2;
+			break;
+		case 0x2E: //LD L *
+			debugOpcode8("ld l",memory.fread8(pc+1), opcode);
+			hl = memory.fread8(pc+1);pc+=2;
+			break;
+		case 0x36: //LD HL *
+			debugOpcode8("ld hl",memory.fread8(pc+1), opcode);
+			hl = memory.fread8(pc+1);pc+=2;
 			break;
 		default:
 			printf("0x%X\t|0x%X\t|??? \t<-- Unsupported Instruction: halt!\n",pc,opcode);
