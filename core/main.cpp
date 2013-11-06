@@ -16,7 +16,8 @@ void z80(string filename)
 	{
 		cpu.step();
 	}
-	printf("a:0x%X\tb:0x%X\tc:0x%X\td:0x%X\te:0x%X\th:0x%X\tl:0x%X\tpc:0x%X\n",cpu.a,cpu.b,cpu.c,cpu.d,cpu.e,cpu.h,cpu.l,cpu.pc);
+	printf("a:0x%X\tb:0x%X\tc:0x%X\td:0x%X\te:0x%X\th:0x%X\tl:0x%X\tpc:0x%X\n",cpu.a,cpu.b,cpu.c,cpu.d,cpu.e,((cpu.hl & 0xFF00) >> 8), (cpu.hl & 0x00FF),cpu.pc);
+
 }
 
 void gameboy(string filename)
