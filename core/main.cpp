@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
 			printf(" * -lr35902\n");
 			printf("Options for system:\n");
 			printf(" * -gameboy\n");
-			id = 1;
+			return 0;
 		}
 		i++;
 	}
