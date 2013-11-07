@@ -1,0 +1,6 @@
+language: c
+compiler: g++
+before_install:
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq z80asm make
+script: make
