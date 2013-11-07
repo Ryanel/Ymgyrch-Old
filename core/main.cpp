@@ -70,7 +70,23 @@ int main(int argc, char* argv[])
 		{
 			filename = argv[i];
 		}
+		if(strcmp("--help",argv[i])==0)
+		{
+			printf("Help:\n");
+			printf("Every time you run Ymgyrch, you need to specifiy either the system or cpu, and the filename\n");
+			printf("Options for CPU:\n");
+			printf(" * -z80\n");
+			printf(" * -8086\n");
+			printf(" * -lr35902\n");
+			printf("Options for system:\n");
+			printf(" * -gameboy\n");
+			id = 1;
+		}
 		i++;
+	}
+	if(id == 0)
+	{
+		printf("No cpu specified! Try -z80 or --help\n");
 	}
 	if(strcmp("",filename.c_str())==0)
 	{
@@ -86,7 +102,7 @@ int main(int argc, char* argv[])
 			gameboy(filename);
 			break;
 		default:
-			printf("No cpu specified! Try -z80\n");
+			return 0x5;
 			break;
 
 	}
