@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <LR35902.h>
 #include <Z80.h>
+#include <ybf/YbfCpu.h>
 #include <cstring>
 #include <unistd.h>
 using namespace std;
+
 void z80(string filename);
 void gameboy(string filename);
+void ybf(string filename);
+
 void z80(string filename)
 {
 	printf("Emulating a Z80\n");
@@ -29,6 +33,19 @@ void gameboy(string filename)
 	cpu.reset();
 	cpu.memory.cpu_point=&cpu;
 	cpu.running=true;
+	while(cpu.running)
+	{
+		cpu.step();
+	}
+}
+
+void ybf(string filename)
+{
+	printf("Running a YBF executable\n");
+	YbfCpu cpu;
+	cpu.reset();
+	cpu.running=true;
+	cpu.processOpcode(0x10);
 	while(cpu.running)
 	{
 		cpu.step();
@@ -66,6 +83,10 @@ int main(int argc, char* argv[])
 		{
 			id = 3;
 		}
+		else if (strcmp("-ybf",argv[i])==0)
+		{
+			id = 4;
+		}
 		else
 		{
 			filename = argv[i];
@@ -100,6 +121,9 @@ int main(int argc, char* argv[])
 			break;
 		case 0x2: // Gameboy
 			gameboy(filename);
+			break;
+		case 0x4: // YBF
+			ybf(filename);
 			break;
 		default:
 			return 0x5;

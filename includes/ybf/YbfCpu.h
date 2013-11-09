@@ -1,11 +1,11 @@
-#ifndef Z80_CPU_H
-#define Z80_CPU_H
+#ifndef YBF_CPU_H
+#define YBF_CPU_H
 #include <string>
 #include <stdint.h>
 #include <GenericCpu.h>
-#include <ybf/YBFCpu.h>
+#include <ybf/YbfCpu.h>
 using namespace std;
-class YBFCpu: public GenericCpu {
+class YbfCpu: public GenericCpu {
 	private:
 		//Internal Functions
 		void debugOpcode(string name, uint8_t opcode);
@@ -27,9 +27,8 @@ class YBFCpu: public GenericCpu {
 		void step();
 		void reset();
 		void processOpcode(uint8_t opcode);
-		YBFCpu();
+		YbfCpu();
 		bool running;
-		Z80Memory memory;
 };
 
 #endif
