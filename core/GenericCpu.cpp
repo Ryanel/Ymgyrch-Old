@@ -1,6 +1,5 @@
 #include <GenericCpu.h>
 #include <stdio.h>
-using namespace std;
 GenericCpu::GenericCpu() //Put init stuff here
 {
 	

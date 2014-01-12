@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <LR35902.h>
 #include <Z80.h>
 #include <ybf/YbfCpu.h>
 #include <cstring>
+#include <ctime>
 #include <unistd.h>
 using namespace std;
 
@@ -10,6 +10,8 @@ void z80(string filename);
 void gameboy(string filename);
 void ybf(string filename);
 
+//options
+int benchmark=0;
 void z80(string filename)
 {
 	printf("Emulating a Z80\n");
@@ -17,10 +19,25 @@ void z80(string filename)
 	cpu.reset();
 	cpu.running=true;
 	cpu.memory.loadRom(filename,0);
+	if(benchmark)
+	{
+		int count = 0;
+		int max = benchmark;
+		clock_t starttime = clock();
+		while(count!=max && cpu.running)
+		{
+			cpu.step();
+			count++;
+		}
+		clock_t endtime = clock();
+		printf("a:0x%X\tb:0x%X\tc:0x%X\td:0x%X\te:0x%X\th:0x%X\tl:0x%X\tpc:0x%X\n",cpu.a,cpu.b,cpu.c,cpu.d,cpu.e,((cpu.hl & 0xFF00) >> 8), (cpu.hl & 0x00FF),cpu.pc);
+		printf("Emulated cycles: %d\n",count);
+		printf("Time taken: %d clocks\n",(int)(endtime - starttime));
+		return;
+	}
 	while(cpu.running)
 	{
 		cpu.step();
-		usleep(1);
 	}
 	printf("a:0x%X\tb:0x%X\tc:0x%X\td:0x%X\te:0x%X\th:0x%X\tl:0x%X\tpc:0x%X\n",cpu.a,cpu.b,cpu.c,cpu.d,cpu.e,((cpu.hl & 0xFF00) >> 8), (cpu.hl & 0x00FF),cpu.pc);
 
@@ -28,6 +45,7 @@ void z80(string filename)
 
 void gameboy(string filename)
 {
+	/*
 	printf("Emulating a LR35902 (Gameboy)\n");
 	LR35902Cpu cpu;
 	cpu.reset();
@@ -37,6 +55,7 @@ void gameboy(string filename)
 	{
 		cpu.step();
 	}
+	*/
 }
 
 void ybf(string filename)
@@ -66,7 +85,12 @@ int main(int argc, char* argv[])
 	string filename="";
 	while(i!=argc)
 	{
-		if(strcmp("-z80",argv[i])==0)
+		if(strcmp("-bench",argv[i])==0)
+		{
+			printf("Benchmarking: enabled\n");
+			benchmark = 1000;
+		}
+		else if(strcmp("-z80",argv[i])==0)
 		{
 			printf("CPU: Z80\n");
 			id = 1;

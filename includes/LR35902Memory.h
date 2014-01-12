@@ -11,12 +11,12 @@ class LR35902Memory
 	
 	private:
 		bool inBios;
-		uint8_t bios[];
-		uint8_t rom[];
-		uint8_t wram[];
-		uint8_t eram[];
-		uint8_t zram[];
-		uint8_t vram[]; //TODO: REMOVE
+		uint8_t bios[0];
+		uint8_t rom[0];
+		uint8_t wram[0];
+		uint8_t eram[0];
+		uint8_t zram[0];
+		uint8_t vram[0]; //TODO: REMOVE
 	public:
 		//Flat Memory Functions
 		uint8_t fread8(int location); 

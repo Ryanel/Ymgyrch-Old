@@ -134,7 +134,6 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 		
 		case 0x7F: // A <- A
 			debugOpcode("ld A,A",opcode); pc++;
-			a=a;
 			break;
 		case 0x78: // A <- B
 			debugOpcode("ld A,B",opcode); pc++;
@@ -179,7 +178,6 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			break;
 		case 0x40: // B <- B
 			debugOpcode("ld B,B",opcode); pc++;
-			b=b;
 			break;
 		case 0x41: // B <- C
 			debugOpcode("ld B,C",opcode); pc++;
@@ -224,7 +222,6 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			break;
 		case 0x49: // C <- C
 			debugOpcode("ld C,C",opcode); pc++;
-			c=c;
 			break;
 		case 0x4A: // C <- D
 			debugOpcode("ld C,D",opcode); pc++;
@@ -270,7 +267,6 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			break;
 		case 0x52: // D <- D
 			debugOpcode("ld D,D",opcode); pc++;
-			d=d;
 			break;
 		case 0x53: // D <- E
 			debugOpcode("ld D,E",opcode); pc++;
@@ -315,7 +311,6 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			break;
 		case 0x5B: // E <- E
 			debugOpcode("ld E,E",opcode); pc++;
-			e=e;
 			break;
 		case 0x5C: // E <- H
 			debugOpcode("ld E,H",opcode); pc++;

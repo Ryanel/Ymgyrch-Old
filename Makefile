@@ -1,15 +1,12 @@
 # Ymgyrch Build Script
 
 AS := nasm
-CC := gcc
-CPP := g++
+CC := clang
+CPP := clang++
 ASFLAGS :=
 LD := g++
 LFLAGS :=
-CPPFLAGS := -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith \
--Wmissing-declarations -Winline -Wundef -Wcast-qual -Wshadow -Wwrite-strings \
--Wno-unused-parameter -Wfloat-equal -ansi
-
+CPPFLAGS := -g -O2
 #Files
 #Format: {NAME}_{TYPE} := $(patsubst %.cpp,%.o,$(wildcard {PATH}/*.cpp))
 COREFILES_CPP := $(patsubst %.cpp,%.o,$(wildcard core/*.cpp))
@@ -31,7 +28,7 @@ core: ${COREFILES_CPP}
 
 %.o: %.cpp
 	@echo "Making: " $@
-	@g++ -c ${CPPFLAGS} -I ./includes/ -o $@ $<
+	@${CPP} -c ${CPPFLAGS} -I ./includes/ -o $@ $<
 
 %.o: %.s
 	@echo "Making: " $@
