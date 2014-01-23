@@ -16,6 +16,7 @@ class YbfMemory
 		uint16_t fread16(int location); 
 		uint16_t fwrite16(int location,uint16_t data);
 		void loadRom(string location);
+		void dumptofile(string location);
 		void clear();
 };
 

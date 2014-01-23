@@ -42,6 +42,11 @@ void YbfMemory::loadRom(string location)
 		}
 	}
 }
+void YbfMemory::dumptofile(string location)
+{
+	ofstream out(location.c_str(), ios::out | ios::binary);
+    out.write ((char*)ram, YBF_MEMORY_MAX);
+}
 void YbfMemory::clear()
 {
 	//TODO: CLEAR MEMORY

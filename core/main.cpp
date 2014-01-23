@@ -12,6 +12,7 @@ void ybf(string filename);
 
 //options
 int benchmark=0;
+bool dumpmem=false;
 void z80(string filename)
 {
 	printf("Emulating a Z80\n");
@@ -77,7 +78,11 @@ void ybf(string filename)
 		i++;
 	}
 	printf("PC\t= 0x%X \t I\t= 0x%X\n",cpu.pc,cpu.I);
-	
+	if(dumpmem)
+	{
+		printf("Dumping Memory...\n");
+		cpu.memory.dumptofile("memdump.bin");
+	}
 }
 
 int main(int argc, char* argv[])
@@ -98,6 +103,11 @@ int main(int argc, char* argv[])
 		{
 			printf("Benchmarking: enabled\n");
 			benchmark = 1000;
+		}
+		if(strcmp("-dumpmem",argv[i])==0)
+		{
+			printf("Dumping memory after executing...\n");
+			dumpmem = true;
 		}
 		else if(strcmp("-z80",argv[i])==0)
 		{
