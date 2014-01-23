@@ -63,12 +63,20 @@ void ybf(string filename)
 	printf("Running a YBF executable\n");
 	YbfCpu cpu;
 	cpu.reset();
+	cpu.memory.loadRom(filename);
 	cpu.running=true;
-	cpu.processOpcode(0x10);
 	while(cpu.running)
 	{
 		cpu.step();
 	}
+	printf("Execution Ended:\n");
+	int i = 0;
+	while(i!=16)
+	{
+		printf("R%d\t= 0x%X \t R%d\t= 0x%X\n",i,cpu.R[i],i,cpu.XR[i]);
+		i++;
+	}
+	
 }
 
 int main(int argc, char* argv[])
@@ -119,11 +127,13 @@ int main(int argc, char* argv[])
 		{
 			printf("Help:\n");
 			printf("Every time you run Ymgyrch, you need to specifiy either the system or cpu, and the filename\n");
-			printf("Options for CPU:\n");
+			printf("Avalable Bytecode Formats:\n");
+			printf(" * -ybf\n");
+			printf("Avalable CPU's:\n");
 			printf(" * -z80\n");
 			printf(" * -8086\n");
 			printf(" * -lr35902\n");
-			printf("Options for system:\n");
+			printf("Avalable System:\n");
 			printf(" * -gameboy\n");
 			return 0;
 		}
@@ -131,7 +141,7 @@ int main(int argc, char* argv[])
 	}
 	if(id == 0)
 	{
-		printf("No cpu specified! Try -z80 or --help\n");
+		printf("No cpu specified! Try --help\n");
 	}
 	if(strcmp("",filename.c_str())==0)
 	{

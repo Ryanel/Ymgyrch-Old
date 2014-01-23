@@ -1,22 +1,17 @@
-#ifndef LR35902_8086_H
-#define LR35902_8086_H
+#ifndef MEMORY_YBF_H
+#define MEMORY_YBF_H
 #include <string>
 #include <stdint.h>
-#include <LR35902.h>
-#include <LR35902Memory.h>
 using namespace std;
-class LR35902Cpu;
-class LR35902Memory
+
+#define YBF_MEMORY_MAX 65535
+#define YBF_ROM_SIZE 65535
+class YbfMemory
 {
 	
 	private:
-		bool inBios;
-		uint8_t bios[0];
-		uint8_t rom[0];
-		uint8_t wram[0];
-		uint8_t eram[0];
-		uint8_t zram[0];
-		uint8_t vram[0];
+		uint8_t ram[YBF_MEMORY_MAX];
+		uint8_t rom[YBF_ROM_SIZE];
 	public:
 		//Flat Memory Functions
 		uint8_t fread8(int location); 
@@ -25,7 +20,6 @@ class LR35902Memory
 		uint16_t fwrite16(int location,uint16_t data);
 		void loadRom(string location);
 		void clear();
-		LR35902Cpu *cpu_point;
 };
 
 #endif

@@ -10,18 +10,11 @@ YbfCpu::YbfCpu() //Put init stuff here
 }
 void YbfCpu::step() //Called every frame
 {
-
+	processOpcode(memory.fread8(pc));
+	pc &= 65535;
 }
 void YbfCpu::reset() //Reset everything
 {
-
-		a=0;
-		b=0;
-		c=0;
-		d=0;
-		s=0;
-		pc=0;
-		sp=0;
 
 }
 
@@ -38,7 +31,12 @@ void YbfCpu::debugOpcode16(string name,uint16_t operand, uint8_t opcode)
 {
 	printf("0x%X\t|0x%X\t|%s 0x%X\n",pc,opcode,name.c_str(),operand);
 }
-
+/*
+void YbfCpu::debugOpcode24(string name,uint16_t operand, uint8_t opcode)
+{
+	printf("0x%X\t|0x%X\t|%s 0x%X\n",pc,opcode,name.c_str(),operand);
+}
+*/
 void YbfCpu::processOpcode(uint8_t opcode)
 {
 	switch(opcode)
@@ -54,13 +52,34 @@ void YbfCpu::processOpcode(uint8_t opcode)
 			running=false;
 			break;
 		case 0x20:
-			debugOpcode("waiti", opcode);
-			running=false;
+			debugOpcode("waiti (unimp)", opcode);
+			pc++;
 			break;
 		//inc
-
+		case 0x01:
+			debugOpcode16("inc R #",memory.fread16(pc + 1), opcode);
+			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]+memory.fread8(pc + 2);
+			pc+=3;
+			break;
+		case 0x11:
+			debugOpcode16("inc R ##",memory.fread16(pc + 1), opcode);
+			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]+memory.fread16(pc + 2);
+			pc+=4;
+			break;
+		//dec
+		case 0x02:
+			debugOpcode16("dec R #",memory.fread16(pc + 1), opcode);
+			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]-memory.fread8(pc + 2);
+			pc+=3;
+			break;
+		case 0x12:
+			debugOpcode16("dec R ##",memory.fread16(pc + 1), opcode);
+			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]-memory.fread16(pc + 2);
+			pc+=4;
+			break;
 		default:
 			printf("0x%X\t|0x%X\t|??? \t<-- Unknown Opcode: Inserting halt!\n",pc,opcode);
-			//memory.fwrite8(pc,0x76);
+			processOpcode(0x10);
+			break;
 	}
 }

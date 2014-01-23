@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <GenericCpu.h>
 #include <ybf/YbfCpu.h>
+#include <ybf/YbfMemory.h>
 using namespace std;
 class YbfCpu: public GenericCpu {
 	private:
@@ -13,22 +14,18 @@ class YbfCpu: public GenericCpu {
 		void debugOpcode16(string name,uint16_t operand, uint8_t opcode);
 	public:
 		//uint32_t cycles;
-		uint8_t a; //GP
-		uint8_t b; //GP
-		uint8_t c; //GP
-		uint8_t d; //GP
-		uint8_t s; //GP
+		uint8_t R[16]; //General
 		//16-bit registers
 		uint16_t pc; //Program Counter
-		uint16_t sp; //Stack Pointer
-
-		bool flag_sign,flag_zero,flag_interrupt,flag_adjust,flag_parity,flag_carry; // S Z I H P C
+		uint8_t XR[16]; //General eXtended Registeres
+		uint16_t S; //Selector
 		//Functions
 		void step();
 		void reset();
 		void processOpcode(uint8_t opcode);
 		YbfCpu();
 		bool running;
+		YbfMemory memory;
 };
 
 #endif
