@@ -4,34 +4,19 @@
 using namespace std;
 uint8_t YbfMemory::fread8(int location)
 {
-	if(location > YBF_ROM_SIZE)
+	if(location < YBF_MEMORY_MAX)
 	{
-		return ram[location - YBF_ROM_SIZE];
-	}
-	else if (location < YBF_ROM_SIZE)
-	{
-		return rom[location];
-	}
-	else if (location == YBF_ROM_SIZE)
-	{
-		return rom[location];
+		return ram[location];
 	}
 	return 0;
 } 
 uint8_t YbfMemory::fwrite8(int location,uint8_t data)
 {
-	if(location > YBF_ROM_SIZE)
-	{
-		ram[location - YBF_ROM_SIZE] = data;
-	}
-	else if (location < YBF_ROM_SIZE)
+	if (location > YBF_MEMORY_MAX)
 	{
 		return 1;
 	}
-	else if (location == YBF_ROM_SIZE)
-	{
-		return 1;
-	}
+	ram[location] = data;
 	return 0;
 }
 uint16_t YbfMemory::fread16(int location)
@@ -52,7 +37,7 @@ void YbfMemory::loadRom(string location)
 		while(in.good())
 		{
 			in.read(reinterpret_cast<char *>(&temp), 1) ;
-			rom[to]=temp;
+			ram[to]=temp;
 			to++;
 		}
 	}

@@ -41,7 +41,9 @@ void YbfCpu::processOpcode(uint8_t opcode)
 {
 	switch(opcode)
 	{
-		//sys
+			//===================
+			//SYS
+			//===================
 		case 0x00:
 			debugOpcode("nop", opcode);
 			pc++;
@@ -55,28 +57,85 @@ void YbfCpu::processOpcode(uint8_t opcode)
 			debugOpcode("waiti (unimp)", opcode);
 			pc++;
 			break;
-		//inc
+			//===================
+			//ADD
+			//===================
 		case 0x01:
-			debugOpcode16("inc R #",memory.fread16(pc + 1), opcode);
+			debugOpcode16("add R #",memory.fread16(pc + 1), opcode);
 			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]+memory.fread8(pc + 2);
 			pc+=3;
 			break;
 		case 0x11:
-			debugOpcode16("inc R ##",memory.fread16(pc + 1), opcode);
-			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]+memory.fread16(pc + 2);
+			debugOpcode16("add R (##)",memory.fread16(pc + 1), opcode);
+			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]+memory.fread16(memory.fread16(pc + 2));
 			pc+=4;
 			break;
-		//dec
+		case 0x21:
+			debugOpcode16("add R R",memory.fread16(pc + 1), opcode);
+			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)] + R[memory.fread8(pc + 2)];
+			pc+=3;
+			break;
+		case 0x31:
+			debugOpcode16("add (##) #",memory.fread16(pc + 1), opcode);
+			memory.fwrite8(memory.fread16(pc + 1),(memory.fread8(memory.fread16(pc + 1)) + memory.fread8(pc + 2)));
+			pc+=4;
+			break;
+		case 0x41:
+			debugOpcode16("add (##) R",memory.fread16(pc + 1), opcode);
+			memory.fwrite8(memory.fread16(pc + 1),(memory.fread8(memory.fread16(pc + 1)) + R[memory.fread8(pc + 2)]));
+			pc+=4;
+			break;
+		case 0x51:
+			debugOpcode8("add (I) R",memory.fread8(pc + 1), opcode);
+			memory.fwrite8(I,memory.fread8(I) + R[memory.fread8(pc + 1)]);
+			pc+=3;
+			break;
+		case 0x61:
+			debugOpcode8("add (I) #",memory.fread8(pc + 1), opcode);
+			memory.fwrite8(I,memory.fread8(I) + memory.fread8(pc + 1));
+			pc+=3;
+			break;
+			//===================
+			//SUB
+			//===================
 		case 0x02:
-			debugOpcode16("dec R #",memory.fread16(pc + 1), opcode);
+			debugOpcode16("sub R #",memory.fread16(pc + 1), opcode);
 			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]-memory.fread8(pc + 2);
 			pc+=3;
 			break;
 		case 0x12:
-			debugOpcode16("dec R ##",memory.fread16(pc + 1), opcode);
-			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]-memory.fread16(pc + 2);
+			debugOpcode16("sub R ##",memory.fread16(pc + 1), opcode);
+			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)]-memory.fread16(memory.fread16(pc + 2));
 			pc+=4;
 			break;
+		case 0x22:
+			debugOpcode16("sub R R",memory.fread16(pc + 1), opcode);
+			R[memory.fread8(pc + 1)]=R[memory.fread8(pc + 1)] - R[memory.fread8(pc + 2)];
+			pc+=3;
+			break;
+		case 0x32:
+			debugOpcode16("sub (##) #",memory.fread16(pc + 1), opcode);
+			memory.fwrite8(memory.fread16(pc + 1),(memory.fread8(memory.fread16(pc + 1)) - memory.fread8(pc + 2)));
+			pc+=4;
+			break;
+		case 0x42:
+			debugOpcode16("sub (##) R",memory.fread16(pc + 1), opcode);
+			memory.fwrite8(memory.fread16(pc + 1),memory.fread8(memory.fread16(pc + 1)) - R[memory.fread8(pc + 2)]);
+			pc+=4;
+			break;
+		case 0x52:
+			debugOpcode8("sub (I) R",memory.fread8(pc + 1), opcode);
+			memory.fwrite8(I,memory.fread8(I) - R[memory.fread8(pc + 1)]);
+			pc+=3;
+			break;
+		case 0x62:
+			debugOpcode8("sub (I) #",memory.fread8(pc + 1), opcode);
+			memory.fwrite8(I,memory.fread8(I) - memory.fread8(pc + 1));
+			pc+=3;
+			break;
+			//===================
+			//LD
+			//===================
 		default:
 			printf("0x%X\t|0x%X\t|??? \t<-- Unknown Opcode: Inserting halt!\n",pc,opcode);
 			processOpcode(0x10);

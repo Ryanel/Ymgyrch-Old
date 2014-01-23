@@ -73,9 +73,10 @@ void ybf(string filename)
 	int i = 0;
 	while(i!=16)
 	{
-		printf("R%d\t= 0x%X \t R%d\t= 0x%X\n",i,cpu.R[i],i,cpu.XR[i]);
+		printf("R%d\t= 0x%X \t XR%d\t= 0x%X\n",i,cpu.R[i],i,cpu.XR[i]);
 		i++;
 	}
+	printf("PC\t= 0x%X \t I\t= 0x%X\n",cpu.pc,cpu.I);
 	
 }
 

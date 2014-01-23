@@ -18,7 +18,8 @@ class YbfCpu: public GenericCpu {
 		//16-bit registers
 		uint16_t pc; //Program Counter
 		uint8_t XR[16]; //General eXtended Registeres
-		uint16_t S; //Selector
+		uint16_t F; //Flags
+		uint16_t I; //Index
 		//Functions
 		void step();
 		void reset();

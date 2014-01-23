@@ -3,15 +3,12 @@
 #include <string>
 #include <stdint.h>
 using namespace std;
-
 #define YBF_MEMORY_MAX 65535
-#define YBF_ROM_SIZE 65535
 class YbfMemory
 {
 	
 	private:
 		uint8_t ram[YBF_MEMORY_MAX];
-		uint8_t rom[YBF_ROM_SIZE];
 	public:
 		//Flat Memory Functions
 		uint8_t fread8(int location); 
