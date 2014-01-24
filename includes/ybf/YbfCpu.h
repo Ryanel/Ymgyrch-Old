@@ -20,6 +20,7 @@ class YbfCpu: public GenericCpu {
 		uint8_t XR[16]; //General eXtended Registeres
 		uint16_t F; //Flags
 		uint16_t I; //Index
+		uint16_t SP; //Stack Pointer
 		//Functions
 		void step();
 		void reset();
