@@ -145,14 +145,14 @@ void YbfCpu::processOpcode(uint8_t opcode)
 			//LD
 			//===================
 		case 0x71:
-			debugOpcode8("ld R# #",memory.fread8(pc + 1), opcode);
+			debugOpcode16("ld R# #",memory.fread16(pc + 1), opcode);
 			R[memory.fread8(pc + 1)]=memory.fread8(pc + 2);
 			pc+=3;
 			break;
 		case 0x72:
-			debugOpcode8("ld R# (##)",memory.fread8(pc + 1), opcode);
+			debugOpcode16("ld R# (##)",memory.fread16(pc + 2), opcode);
 			R[memory.fread8(pc + 1)]=memory.fread8(memory.fread16(pc + 2));
-			pc+=3;
+			pc+=4;
 			break;
 		case 0x81:
 			debugOpcode8("ld R# R#",memory.fread8(pc + 1), opcode);
@@ -160,7 +160,7 @@ void YbfCpu::processOpcode(uint8_t opcode)
 			pc+=3;
 			break;
 		case 0x82:
-			debugOpcode16("ld (##) R#",memory.fread8(pc + 1), opcode);
+			debugOpcode16("ld (##) R#",memory.fread16(pc + 1), opcode);
 			memory.fwrite8(memory.fread16(pc + 1),R[memory.fread8(pc + 3)]);
 			pc+=4;
 			break;
@@ -170,7 +170,7 @@ void YbfCpu::processOpcode(uint8_t opcode)
 			pc+=3;
 			break;
 		case 0x92:
-			debugOpcode16("ld I (##)",memory.fread8(pc + 1), opcode);
+			debugOpcode16("ld I (##)",memory.fread16(pc + 1), opcode);
 			I = memory.fread16(memory.fread16(pc+1)); //Read at the memory address, dont use literally
 			pc+=3;
 			break;

@@ -4,6 +4,10 @@
 using namespace std;
 uint8_t YbfMemory::fread8(int location)
 {
+	/*if(location >= 0xC000 && location <= (0xC000 + (80*24)))
+	{
+		return vram[location - 0xC000];
+	}*/
 	if(location < YBF_MEMORY_MAX)
 	{
 		return ram[location];

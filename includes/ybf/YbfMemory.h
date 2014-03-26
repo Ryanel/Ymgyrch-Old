@@ -9,6 +9,7 @@ class YbfMemory
 	
 	private:
 		uint8_t ram[YBF_MEMORY_MAX];
+		uint8_t vram[80*24];
 	public:
 		//Flat Memory Functions
 		uint8_t fread8(int location); 
