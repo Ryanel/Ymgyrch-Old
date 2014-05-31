@@ -13,7 +13,7 @@ uint8_t Z80Memory::fwrite8(uint16_t location,uint8_t data)
 }
 uint16_t Z80Memory::fread16(uint16_t location)
 {
-	return fread8(location) + (fread8(location + 1) << 8);
+	return (fread8(location + 1) << 8) + fread8(location);
 }
 uint16_t Z80Memory::fwrite16(uint16_t location,uint16_t data)
 {
@@ -22,6 +22,7 @@ uint16_t Z80Memory::fwrite16(uint16_t location,uint16_t data)
 }
 void Z80Memory::loadRom(string location, uint16_t start)
 {
+	clear();
 	ifstream in(location.c_str());
 	unsigned char temp=0;
 	int to=0;
@@ -43,4 +44,6 @@ void Z80Memory::clear()
 		ram[i]=0;
 		i++;
 	}
+	ram[0x7A00] = 0x76;
+
 }

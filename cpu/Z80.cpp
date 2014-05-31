@@ -59,13 +59,13 @@ void Z80Cpu::push16(uint16_t value)
 }
 uint16_t Z80Cpu::pop16()
 {
-	uint16_t ret = memory.fread16(sp);
+	uint16_t ret = memory.fread16(sp + 2);
 	sp += 2;
 	return ret;
 }
 uint8_t Z80Cpu::pop8()
 {
-	uint8_t ret = memory.fread8(sp);
+	uint8_t ret = memory.fread8(sp + 1);
 	sp += 1;
 	return ret;
 }
@@ -81,7 +81,6 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 		//Control Instructions
 		//------------------------------------
 		
-
 		case 0x00: //NOP
 			debugOpcode("nop",opcode);
 			pc++;
@@ -137,6 +136,17 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 				pc+=2;
 			}
 			break;
+		case 0x28:
+			debugOpcode8("jr z",memory.fread8(pc+1),opcode);
+			if(flag_zero)
+			{
+				pc+=memory.fread8(pc+1);
+			}
+			else
+			{
+				pc+=2;
+			}
+			break;
 		//------------------------------------
 		//LOAD Instructions (A)
 		//------------------------------------
@@ -146,6 +156,18 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			temp16 = memory.fread16(pc+1);
 			c = temp16;
 			b = temp16 >> 8;
+			pc+=3;
+			break;
+		case 0x11: // BC <- **
+			debugOpcode16("ld de",memory.fread16(pc+1),opcode);
+			temp16 = memory.fread16(pc+1);
+			d = temp16;
+			e = temp16 >> 8;
+			pc+=3;
+			break;
+		case 0x21: // BC <- **
+			debugOpcode16("ld hl",memory.fread16(pc+1),opcode);
+			hl = memory.fread16(pc+1);
 			pc+=3;
 			break;
 		case 0x7F: // A <- A
@@ -751,11 +773,16 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			push16(pc + 1);
 			pc=0x38;
 			break;
+		case 0xC9:
+			temp16 = pop16();
+			debugOpcode16("ret ",temp16,opcode);
+			pc = temp16;
+			break;
 		//------------------------------------
 		//Logical Instructions
 		//------------------------------------
 		case 0xB0:
-			debugOpcode("or c",opcode);
+			debugOpcode("or b",opcode);
 			a |= b;
 			pc++;
 			break;
@@ -765,23 +792,13 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			pc++;
 			break;
 		case 0xB2:
-			debugOpcode("or c",opcode);
+			debugOpcode("or d",opcode);
 			a |= d;
 			pc++;
 			break;
 		case 0xB3:
-			debugOpcode("or c",opcode);
+			debugOpcode("or e",opcode);
 			a |= e;
-			pc++;
-			break;
-		case 0xB4:
-			debugOpcode("or c",opcode);
-			a |= h;
-			pc++;
-			break;
-		case 0xB5:
-			debugOpcode("or c",opcode);
-			a |= l;
 			pc++;
 			break;
 		//------------------------------------
@@ -797,6 +814,45 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 				flag_zero=false;
 			//TODO: Finish flags
 			pc+=2;
+			break;
+
+		//------------------------------------
+		//Extended Instructions
+		//------------------------------------
+		case 0xED:
+			temp = memory.fread8(pc+1);
+			switch(temp)
+			{
+				case 0xB0:
+					memory.fwrite8((d<<8) + e,memory.fread8(hl));
+
+					hl++;
+
+					temp16 = ((d<<8) + e) + 1;
+					e = temp16;
+					d = temp16 >> 8;
+
+					temp16 = ((b<<8) + c) - 1;
+					c = temp16;
+					b = temp16 >> 8;
+					times++;
+					if(((b<<8) + c) == 0)
+					{
+						times = 0;
+						pc += 2;
+					}
+					debugOpcode8("ldir - times ", times ,opcode);
+					break;
+				case 0x4D:
+					temp16 = pop16();
+					debugOpcode16("reti ",temp16,opcode);
+					pc = temp16;
+					break;
+				default:
+					printf("0x%04X\t|0x%X\t|ed  0x%X \t<-- Unsupported Instruction!\n",pc,opcode,temp);
+					processOpcode(0x76);
+					break;
+			}
 			break;
 		default:
 			printf("0x%04X\t|0x%X\t|??? \t<-- Unsupported Instruction\n",pc,opcode);

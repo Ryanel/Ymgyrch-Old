@@ -14,6 +14,7 @@ class Z80Cpu: public GenericCpu {
 		void debugOpcode16(string name,uint16_t operand, uint8_t opcode);
 	public:
 		uint32_t cycles;
+		uint16_t times;
 		//8-bit regesters
 		
 		uint8_t a; //GP
