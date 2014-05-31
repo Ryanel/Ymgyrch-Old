@@ -22,6 +22,15 @@ Z80_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/Z80*.cpp))
 
 all: clean z80 core
 
+clean:
+	@echo "Cleaning junk..."
+	@rm -R -f *.o
+	@rm -R -f ./core/*.o
+	@rm -R -f ./cpu/*.o
+	@rm -R -f ./bytecode/ybf/*.o
+	@rm -R -f ./bytecode/smtl/*.o
+	@rm -R -f ./ymgyrch
+
 core: ${COREFILES_CPP}
 	@echo "Building Core"
 	@${LD} -o ymgyrch ${COREFILES_CPP} ${Z80_CPP}
@@ -33,14 +42,7 @@ core: ${COREFILES_CPP}
 %.o: %.s
 	@echo "Making: " $@
 	@${AS} ${ASFLAGS} -o $@ $<
-clean: clean-docs
-	@echo "Cleaning junk..."
-	@rm -R -f *.o
-	@rm -R -f ./core/*.o
-	@rm -R -f ./cpu/*.o
-	@rm -R -f ./bytecode/ybf/*.o
-	@rm -R -f ./bytecode/smtl/*.o
-	@rm -R -f ./ymgyrch
+
 
 clean-docs:
 	-@rm -f -r ./docs/

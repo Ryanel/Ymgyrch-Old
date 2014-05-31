@@ -35,16 +35,39 @@ void Z80Cpu::reset() //Reset everything
 
 void Z80Cpu::debugOpcode(string name, uint8_t opcode)
 {
-	printf("0x%X\t|0x%X\t|%s\n",pc,opcode,name.c_str());
+	printf("0x%04X\t|0x%02X\t|%s\n",pc,opcode,name.c_str());
 }
 
 void Z80Cpu::debugOpcode8(string name,uint8_t operand, uint8_t opcode)
 {
-	printf("0x%X\t|0x%X\t|%s 0x%X\n",pc,opcode,name.c_str(),operand);
+	printf("0x%04X\t|0x%02X\t|%s 0x%X\n",pc,opcode,name.c_str(),operand);
 }
 void Z80Cpu::debugOpcode16(string name,uint16_t operand, uint8_t opcode)
 {
-	printf("0x%X\t|0x%X\t|%s 0x%X\n",pc,opcode,name.c_str(),operand);
+	printf("0x%04X\t|0x%02X\t|%s 0x%X\n",pc,opcode,name.c_str(),operand);
+}
+
+void Z80Cpu::push8(uint8_t value)
+{
+	memory.fwrite8(sp,value);
+	sp -= 1;
+}
+void Z80Cpu::push16(uint16_t value)
+{
+	memory.fwrite16(sp,value);
+	sp -= 2;
+}
+uint16_t Z80Cpu::pop16()
+{
+	uint16_t ret = memory.fread16(sp);
+	sp += 2;
+	return ret;
+}
+uint8_t Z80Cpu::pop8()
+{
+	uint8_t ret = memory.fread8(sp);
+	sp += 1;
+	return ret;
 }
 
 void Z80Cpu::processOpcode(uint8_t opcode)
@@ -114,24 +137,17 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 				pc+=2;
 			}
 			break;
-		case 0xC7: //rst 00
-			debugOpcode("rst 00",opcode);
-			
-			memory.fwrite16(sp,pc);
-			sp -= 2;
-			pc=0;
-			break;
-		case 0xFF: //rst
-			debugOpcode("rst 38",opcode);
-			
-			memory.fwrite16(sp,pc);
-			sp -= 2;
-			pc=0x38;
-			break;
 		//------------------------------------
 		//LOAD Instructions (A)
 		//------------------------------------
 		
+		case 0x01: // BC <- **
+			debugOpcode16("ld bc",memory.fread16(pc+1),opcode);
+			temp16 = memory.fread16(pc+1);
+			c = temp16;
+			b = temp16 >> 8;
+			pc+=3;
+			break;
 		case 0x7F: // A <- A
 			debugOpcode("ld A,A",opcode); pc++;
 			break;
@@ -697,6 +713,77 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			sp=hl;
 			pc++;
 			break;
+		case 0x31:
+			debugOpcode16("ld sp,",memory.fread16(pc+1),opcode);
+			sp = memory.fread16(pc+1);
+			pc+=3;
+			break;
+		case 0x33:
+			debugOpcode("inc sp", opcode);
+			sp++;
+			pc++;
+			break;
+		case 0x3B:
+			debugOpcode("dec sp", opcode);
+			sp--;
+			pc++;
+			break;
+		//------------------------------------
+		//CALL Instructions
+		//------------------------------------
+		case 0xCD:
+			debugOpcode16("call ",memory.fread16(pc+1),opcode);
+			push16(pc + 3);
+			pc = memory.fread16(pc+1);
+			break;
+		case 0xCF:
+			debugOpcode("rst 08h",opcode);
+			push16(pc + 1);
+			pc = 0x08;
+			break;
+		case 0xC7: //rst 00h
+			debugOpcode("rst 00h",opcode);
+			push16(pc + 1);
+			pc=0x0;
+			break;
+		case 0xFF: //rst 38h
+			debugOpcode("rst 38h",opcode);
+			push16(pc + 1);
+			pc=0x38;
+			break;
+		//------------------------------------
+		//Logical Instructions
+		//------------------------------------
+		case 0xB0:
+			debugOpcode("or c",opcode);
+			a |= b;
+			pc++;
+			break;
+		case 0xB1:
+			debugOpcode("or c",opcode);
+			a |= c;
+			pc++;
+			break;
+		case 0xB2:
+			debugOpcode("or c",opcode);
+			a |= d;
+			pc++;
+			break;
+		case 0xB3:
+			debugOpcode("or c",opcode);
+			a |= e;
+			pc++;
+			break;
+		case 0xB4:
+			debugOpcode("or c",opcode);
+			a |= h;
+			pc++;
+			break;
+		case 0xB5:
+			debugOpcode("or c",opcode);
+			a |= l;
+			pc++;
+			break;
 		//------------------------------------
 		//FLAGS + COMPARE Instructions
 		//------------------------------------
@@ -712,8 +799,7 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			pc+=2;
 			break;
 		default:
-			printf("0x%X\t|0x%X\t|??? \t<-- Unsupported Instruction\n",pc,opcode);
-			pc++;
-			//processOpcode(0x76);
+			printf("0x%04X\t|0x%X\t|??? \t<-- Unsupported Instruction\n",pc,opcode);
+			processOpcode(0x76);
 	}
 }

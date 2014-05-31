@@ -36,6 +36,11 @@ class Z80Cpu: public GenericCpu {
 		void step();
 		void reset();
 		void processOpcode(uint8_t opcode);
+
+		void push8(uint8_t value);
+		void push16(uint16_t value);
+		uint16_t pop16();
+		uint8_t pop8();
 		Z80Cpu();
 		bool running;
 		Z80Memory memory;
