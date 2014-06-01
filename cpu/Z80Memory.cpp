@@ -44,6 +44,6 @@ void Z80Memory::clear()
 		ram[i]=0;
 		i++;
 	}
-	ram[0x7A00] = 0x76;
+	ram[0x500] = 0x76;
 
 }
