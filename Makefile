@@ -1,39 +1,40 @@
 # Ymgyrch Build Script
 
 AS := nasm
-CC := clang
+CC := clang -std=c++0x
 CPP := clang++
 ASFLAGS :=
-LD := g++
+LD := clang++ -std=c++0x
 LFLAGS :=
 CPPFLAGS := -g -O2
 #Files
 #Format: {NAME}_{TYPE} := $(patsubst %.cpp,%.o,$(wildcard {PATH}/*.cpp))
-COREFILES_CPP := $(patsubst %.cpp,%.o,$(wildcard core/*.cpp))
-#Bytecode
-YBF_CPP := $(patsubst %.cpp,%.o,$(wildcard bytecode/ybf/*.cpp))
-SMTL_CPP:= $(patsubst %.cpp,%.o,$(wildcard bytecode/smtl/*.cpp))
-#CPU
-8086_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/8086*.cpp))
-LR35902_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/LR35902*.cpp))
-Z80_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/Z80*.cpp))
+CORE_CPP := $(patsubst %.cpp,%.o,$(wildcard core/*.cpp))
+CPU_CPP:= $(patsubst %.cpp,%.o,$(wildcard cpu/*.cpp))
+SYSTEM_CPP:= $(patsubst %.cpp,%.o,$(wildcard system/*.cpp))
 #----------
-.PHONY: all clean
+.PHONY: all clean ymgyrch
 
-all: clean z80 core
+all: cpu system core ymgyrch
 
 clean:
 	@echo "Cleaning junk..."
 	@rm -R -f *.o
 	@rm -R -f ./core/*.o
 	@rm -R -f ./cpu/*.o
+	@rm -R -f ./system/*.o
 	@rm -R -f ./bytecode/ybf/*.o
 	@rm -R -f ./bytecode/smtl/*.o
 	@rm -R -f ./ymgyrch
 
-core: ${COREFILES_CPP}
-	@echo "Building Core"
-	@${LD} -o ymgyrch ${COREFILES_CPP} ${Z80_CPP}
+core: ${CORE_CPP}
+	
+ymgyrch:
+	@${LD} -o ymgyrch ${CORE_CPP} ${CPU_CPP} ${SYSTEM_CPP}
+
+cpu: ${CPU_CPP}
+
+system: ${SYSTEM_CPP}
 
 %.o: %.cpp
 	@echo "Making: " $@
@@ -50,16 +51,4 @@ run:
 	@./ymgyrch
 
 
-8086: ${8086_CPP}
-	@echo "Added CPU: 8086"
-ybf: ${YBF_CPP}
-	@echo "Added YBF"
-smtl: ${SMTL_CPP}
-	@echo "Added SMTL"
-lr35902: ${LR35902_CPP}
-	@echo "Added CPU: LR35902"
-z80: ${Z80_CPP}
-	@echo "Added CPU: Z80"
-#Systems
-gameboy: lr35902
-	@echo "Added System: Gameboy"
+

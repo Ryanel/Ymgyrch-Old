@@ -85,12 +85,17 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			debugOpcode("nop",opcode);
 			pc++;
 			cycles += 4;
+			flag_zero = 0;
+			flag_carry = 0;
 			break;
 		case 0x76: //HALT
 			debugOpcode("halt \t<-- End of Execution",opcode);
 			running=false;
 			break;
-		
+		case 0xFB:
+			debugOpcode("ei",opcode);
+			pc++;
+			break;
 		//------------------------------------
 		//Branch Control Instructions
 		//------------------------------------
@@ -139,6 +144,28 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 		case 0x28:
 			debugOpcode8("jr z",memory.fread8(pc+1),opcode);
 			if(flag_zero)
+			{
+				pc+=memory.fread8(pc+1);
+			}
+			else
+			{
+				pc+=2;
+			}
+			break;
+		case 0x20:
+			debugOpcode8("jr nz",memory.fread8(pc+1),opcode);
+			if(!flag_zero)
+			{
+				pc+=memory.fread8(pc+1);
+			}
+			else
+			{
+				pc+=2;
+			}
+			break;
+		case 0x38:
+			debugOpcode8("jr c",memory.fread8(pc+1),opcode);
+			if(flag_carry)
 			{
 				pc+=memory.fread8(pc+1);
 			}
@@ -517,10 +544,25 @@ void Z80Cpu::processOpcode(uint8_t opcode)
 			debugOpcode("add A,(HL)",opcode); pc++;
 			a = a + hl;
 			break;
+		case 0x8B: // A <- A + (HL) + C
+			debugOpcode("adc A,E ",opcode); pc++;
+			a = a + e + (uint8_t)flag_carry;
+			break;
 
 		//------------------------------------
 		//INC Increment Instructions
 		//------------------------------------
+
+		case 0x13: // DE <- DE + 1
+			debugOpcode("inc DE",opcode); pc++;
+			temp16 = ((d<<8) + e) + 1;
+			e = temp16;
+			d = temp16 >> 8;
+			if(temp16 == 0)
+			{
+				flag_carry=true;
+			}
+			break;
 
 		case 0x3C: // A <- A + 1
 			debugOpcode("inc A",opcode); pc++;
