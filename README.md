@@ -11,6 +11,8 @@ The native bytecode format. Light and quick, avalable under bytecode/ybf.
 
 Ymgyrch will also contain the assembler / compiler for ymgyrch.
 
+Bytecode spreadsheet is avalable [here](https://docs.google.com/spreadsheet/ccc?key=0AsruEzzE6SPOdHZCREZLaUtReHBGZE0yb2JLUFhsU3c&usp=sharing)
+
 
 ### Self Modifing Test Format (.smtl)
 Another native bytecode format. Developed as an experiment for self modifing code.

@@ -15,5 +15,6 @@
 ymgyrch
 *.sublime*
 *.z80
+*.ybf
 *.gb*
 *.bin
